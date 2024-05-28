@@ -20,7 +20,7 @@ export default function CollectEggs() {
 		const response = await apiService.collectEgg(nestId);
 
 		if (response.status === 200) {
-			await callback(nestId);
+			 callback(nestId);
 			message.success("Collect Egg successfully");
 		}
 		// else message.error("Collect egg fall")
@@ -47,13 +47,17 @@ export default function CollectEggs() {
 	};
 
 	const handleCollect = () => {
-		const duck = ducks[random(ducks.length)];
-
-		nests.forEach(async (nest) => {
+		nests.forEach( (nest, i) => {
+			console.log(`nest ${i}::`, {
+				status: nest.status,
+				type_egg: nest.type_egg,
+				isNestEmpty: nest.type_egg === null && nest.status === 1
+			})
 			if (nest.type_egg !== null && nest.status === 2) {
 				if (eggLevels.includes(nest.type_egg)) {
-					await collect(nest.id, async (nestId) => {
-						await layEgg(nestId, duck.id);
+					 collect(nest.id,  (nestId) => {
+						const duck = ducks[random(ducks.length)];
+						 layEgg(nestId, duck.id);
 					});
 				} else {
 					api.warning({
@@ -62,7 +66,8 @@ export default function CollectEggs() {
 					});
 				}
 			} else {
-				await layEgg(nest.id, duck.id);
+				const duck = ducks[random(ducks.length)];
+				 layEgg(nest.id, duck.id);
 			}
 		});
 
@@ -85,7 +90,9 @@ export default function CollectEggs() {
 		};
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isCollect]);
+	}, [nests.reduce((total, current) => {
+		return total + current.status;
+	}), isCollect]);
 
 	const showModal = () => {
 		setIsModalOpen(true);
