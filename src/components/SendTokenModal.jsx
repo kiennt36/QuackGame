@@ -1,17 +1,22 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Button, Modal, Form, Input, message } from "antd";
+import * as apiService from "../api"
+import { QuackCtx } from "../context/QuackContext";
 
 export default function SendTokenModal({ open, onOk, onCancel }) {
+	const {updateContext} = useContext(QuackCtx)
     const [form] = Form.useForm();
 
 	const onFinish = async (values) => {
         const {token} = values;
-		const response = await fetch(`https://api-quack-game.somee.com/QuackQuack/SendToken?token=${token}`, {
-            method: 'GET'
-        })
+		const response = await apiService.sendToken(token)
 
-        if(response.status === 200)
+        if(response?.status === 200) {
+			const uid = response.uid;
+			localStorage.setItem("uid", uid);
+			updateContext({uid: uid})
             message.success("Send token successfully!")
+		}
         else
             message.error("Send token failed")
 
@@ -33,9 +38,6 @@ export default function SendTokenModal({ open, onOk, onCancel }) {
 			<Form
             form={form}
 				name="sendTokenForm"
-				initialValues={{
-					remember: true,
-				}}
 				onFinish={onFinish}
 				onFinishFailed={onFinishFailed}
 				autoComplete="off"

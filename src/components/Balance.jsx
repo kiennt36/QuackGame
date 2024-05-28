@@ -1,42 +1,43 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { Card, Col, message, Row } from "antd";
+import * as apiService from "../api";
+import { QuackCtx } from "../context/QuackContext";
 
 export default function Balance() {
-    const [balance, setBalance] = useState([])
-    async function getBalance () {
-        const response = await fetch(`https://api-quack-game.somee.com/QuackQuack/GetBalance`, {
-            method: 'GET'
-        })
+	const { uid, balance, updateContext } = useContext(QuackCtx);
+	async function getBalance() {
+		const response = await apiService.getBalance();
+		if (response.status === 200) {
+			updateContext({
+                balance: response.data.data ?? []
+            });
+		} else message.error("Get Balance Failed");
+	}
 
-        if(response.status === 200) {
-            const responseJson = await response.json();
-            setBalance(responseJson.data.data ?? [])
-        }
-            
-        else
-            message.error("Get Balance Failed")
-    }
+	useEffect(() => {
+		let getBalanceInterval = null;
 
-    useEffect(() => {
-        getBalance()
-        const getBalanceInterval = setInterval(() => getBalance(), 3e3)
+		if (uid) {
+			getBalance();
+			getBalanceInterval = setInterval(() => getBalance(), 3e3);
+		}
 
-        return () => {
-            clearInterval(getBalanceInterval)
-        }
-    }, [])
+		return () => {
+			getBalanceInterval && clearInterval(getBalanceInterval);
+		};
+
+        // eslint-disable-next-line
+	}, [uid]);
 
 	return (
 		<Row gutter={16}>
-            {
-                balance.map((balance, i) => (
-                    <Col span={6} key={balance.symbol + i}>
-				<Card title={balance.symbol} bordered={false}>
-					{balance.balance}
-				</Card>
-			</Col>
-                ))
-            }
+			{balance.map((balance, i) => (
+				<Col span={6} key={balance.symbol + i}>
+					<Card title={balance.symbol} bordered={false}>
+						{balance.balance}
+					</Card>
+				</Col>
+			))}
 		</Row>
 	);
 }

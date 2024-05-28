@@ -1,8 +1,13 @@
+import QuackContext from "./context/QuackContext";
 import DashboardPage from "./pages/DashboardPage";
 import "antd/dist/reset.css";
 
 function App() {
-	return <DashboardPage />;
+	return (
+		<QuackContext>
+			<DashboardPage />;
+		</QuackContext>
+	);
 }
 
 export default App;
