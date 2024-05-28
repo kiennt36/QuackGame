@@ -36,16 +36,11 @@ export default function CollectEggs() {
 			const balanceResponse = await apiService.getBalance();
 			const getListReloadResponse = await apiService.getListReload();
 
-			if (
-				balanceResponse.status === 200 &&
-				getListReloadResponse.status === 200
-			) {
-				updateContext({
-					balance: balanceResponse.data.data ?? [],
-					ducks: getListReloadResponse.data.duck ?? [],
-					nests: getListReloadResponse.data.nest ?? [],
-				});
-			}
+			updateContext({
+				balance: balanceResponse.data?.data ?? [],
+				ducks: getListReloadResponse.data?.duck ?? [],
+				nests: getListReloadResponse.data?.nest ?? [],
+			});
 		}
 
 		// else message.error("Lay Egg fall")
