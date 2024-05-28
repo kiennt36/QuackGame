@@ -46,7 +46,7 @@ export default function CollectEggs() {
 		// else message.error("Lay Egg fall")
 	};
 
-	const handleCollect = useCallback(() => {
+	const handleCollect = () => {
 		const isEggsValid = nests.every((n) => !!n.type_egg);
 		const duck = ducks[random(ducks.length)];
 
@@ -57,7 +57,7 @@ export default function CollectEggs() {
 		}
 
 		nests.forEach(async (nest) => {
-			if (nest.type_egg) {
+			if (nest.type_egg && nest.status === 2) {
 				if (eggLevels.includes(nest.type_egg)) {
 					await collect(nest.id, async (nestId) => {
 						await layEgg(nestId, duck.id);
@@ -74,7 +74,7 @@ export default function CollectEggs() {
 		});
 
 		// eslint-disable-next-line
-	}, [nests.lenght, ducks.lenght, eggLevels.length]);
+	}
 
 	useEffect(() => {
 		const collectSetInterval = setInterval(() => {
