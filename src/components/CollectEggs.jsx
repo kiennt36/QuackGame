@@ -47,14 +47,7 @@ export default function CollectEggs() {
 	};
 
 	const handleCollect = () => {
-		const isEggsValid = nests.every((n) => !!n.type_egg);
 		const duck = ducks[random(ducks.length)];
-
-		if (!isEggsValid) {
-			nests.forEach((nest) => {
-				layEgg(nest.id, duck.id);
-			});
-		}
 
 		nests.forEach(async (nest) => {
 			if (nest.type_egg && nest.status === 2) {
@@ -69,7 +62,7 @@ export default function CollectEggs() {
 					});
 				}
 			} else {
-				layEgg(nest.id, duck.id);
+				await layEgg(nest.id, duck.id);
 			}
 		});
 
