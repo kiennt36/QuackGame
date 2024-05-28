@@ -85,6 +85,7 @@ export default function CollectEggsModal({ open, onOk, onCancel }) {
         })
         localStorage.setItem("eggLevels", JSON.stringify(eggLevels))
 		form.resetFields();
+		setCheckedList(defaultCheckedList);
 		onOk();
 	};
 	const onFinishFailed = (errorInfo) => {

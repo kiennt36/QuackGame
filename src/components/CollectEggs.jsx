@@ -50,7 +50,7 @@ export default function CollectEggs() {
 		const duck = ducks[random(ducks.length)];
 
 		nests.forEach(async (nest) => {
-			if (nest.type_egg && nest.status === 2) {
+			if (nest.type_egg !== null && nest.status === 2) {
 				if (eggLevels.includes(nest.type_egg)) {
 					await collect(nest.id, async (nestId) => {
 						await layEgg(nestId, duck.id);
