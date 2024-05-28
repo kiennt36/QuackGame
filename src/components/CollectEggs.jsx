@@ -61,10 +61,10 @@ export default function CollectEggs() {
 			});
 		}
 
-		nests.forEach((nest) => {
+		nests.forEach(async (nest) => {
 			if (nest.type_egg) {
 				if (eggLevels.includes(nest.type_egg)) {
-					collect(nest.id, async (nestId) => {
+					await collect(nest.id, async (nestId) => {
 						await layEgg(nestId, duck.id);
 					});
 				} else {
