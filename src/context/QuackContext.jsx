@@ -2,10 +2,10 @@ import React, { createContext, useState } from 'react'
 
 const ctxValueDefault = {
     uid: localStorage.getItem('uid'),
-    ducks: JSON.parse(localStorage.getItem('ducks') ?? '[]'),
-    nests: JSON.parse(localStorage.getItem('nests') ?? '[]'),
-    balance: JSON.parse(localStorage.getItem('balance') ?? '[]'),
-    eggLevels: JSON.parse(localStorage.getItem('eggLevels')?? '[]'),
+    ducks: JSON.parse(localStorage.getItem('ducks') || '[]'),
+    nests: JSON.parse(localStorage.getItem('nests') || '[]'),
+    balance: JSON.parse(localStorage.getItem('balance') || '[]'),
+    eggLevels: JSON.parse(localStorage.getItem('eggLevels')|| '[]'),
     isCollect: false
 }
 export const QuackCtx = createContext(ctxValueDefault)

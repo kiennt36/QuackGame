@@ -90,7 +90,7 @@ export default function CollectEggs() {
 		};
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [nests.reduce((total, current) => {
+	}, [nests?.reduce((total, current) => {
 		return total + current.status;
 	}), isCollect]);
 
