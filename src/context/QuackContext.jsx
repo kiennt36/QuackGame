@@ -5,7 +5,7 @@ const ctxValueDefault = {
     ducks: JSON.parse(localStorage.getItem('ducks') ?? '[]'),
     nests: JSON.parse(localStorage.getItem('nests') ?? '[]'),
     balance: JSON.parse(localStorage.getItem('balance') ?? '[]'),
-    eggLevels: JSON.parse(localStorage.getItem('eggLevels')?? '[]'),
+    eggLevels: JSON.parse(localStorage.getItem('eggLevels')?? '[1, 2]'),
     isCollect: false
 }
 export const QuackCtx = createContext(ctxValueDefault)
