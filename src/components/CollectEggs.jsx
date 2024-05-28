@@ -54,7 +54,7 @@ export default function CollectEggs() {
 	const handleCollect = useCallback(() => {
 		nests.forEach((nest) => {
 			const duck = ducks[random(ducks.length)];
-			if (nest.type_egg && nest.egg_config_id) {
+			if (nest.type_egg) {
 				if (eggLevels.includes(nest.type_egg)) {
 					collect(nest.id, async (nestId) => {
 						await layEgg(nestId, duck.id);
