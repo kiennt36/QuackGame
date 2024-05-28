@@ -52,8 +52,16 @@ export default function CollectEggs() {
 	};
 
 	const handleCollect = useCallback(() => {
+		const isEggsValid = nests.every((n) => !!n.type_egg);
+		const duck = ducks[random(ducks.length)];
+
+		if (!isEggsValid) {
+			nests.forEach((nest) => {
+				layEgg(nest.id, duck.id);
+			});
+		}
+
 		nests.forEach((nest) => {
-			const duck = ducks[random(ducks.length)];
 			if (nest.type_egg) {
 				if (eggLevels.includes(nest.type_egg)) {
 					collect(nest.id, async (nestId) => {
