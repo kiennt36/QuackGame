@@ -1,5 +1,5 @@
 import { FloatButton, message, notification } from "antd";
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { PauseCircleOutlined, PlayCircleOutlined } from "@ant-design/icons";
 
 import * as apiService from "../api";
@@ -20,7 +20,7 @@ export default function CollectEggs() {
 		const response = await apiService.collectEgg(nestId);
 
 		if (response.status === 200) {
-			 callback(nestId);
+			callback(nestId);
 			message.success("Collect Egg successfully");
 		}
 		// else message.error("Collect egg fall")
@@ -32,47 +32,51 @@ export default function CollectEggs() {
 
 		if (response.status === 200) {
 			message.success("Lay Egg successfully");
-
-			const balanceResponse = await apiService.getBalance();
-			const getListReloadResponse = await apiService.getListReload();
-
-			updateContext({
-				balance: balanceResponse.data?.data ?? [],
-				ducks: getListReloadResponse.data?.duck ?? [],
-				nests: getListReloadResponse.data?.nest ?? [],
-			});
 		}
+		await reloadData();
 
 		// else message.error("Lay Egg fall")
 	};
 
+	const reloadData = async () => {
+		const balanceResponse = await apiService.getBalance();
+		const getListReloadResponse = await apiService.getListReload();
+
+		updateContext({
+			balance: balanceResponse.data?.data ?? [],
+			ducks: getListReloadResponse.data?.duck ?? [],
+			nests: getListReloadResponse.data?.nest ?? [],
+		});
+	};
+
 	const handleCollect = () => {
-		nests.forEach( (nest, i) => {
+		nests.forEach(async (nest, i) => {
 			console.log(`nest ${i}::`, {
 				status: nest.status,
 				type_egg: nest.type_egg,
-				isNestEmpty: nest.type_egg === null && nest.status === 1
-			})
+				isNestEmpty: nest.type_egg === null && nest.status === 1,
+			});
 			if (nest.type_egg !== null && nest.status === 2) {
 				if (eggLevels.includes(nest.type_egg)) {
-					 collect(nest.id,  (nestId) => {
+					await collect(nest.id, async (nestId) => {
 						const duck = ducks[random(ducks.length)];
-						 layEgg(nestId, duck.id);
+						await layEgg(nestId, duck.id);
 					});
 				} else {
 					api.warning({
 						message: "Warning",
 						description: `You have egg level ${nest.type_egg} to collect`,
 					});
+					await reloadData();
 				}
 			} else {
 				const duck = ducks[random(ducks.length)];
-				 layEgg(nest.id, duck.id);
+				await layEgg(nest.id, duck.id);
 			}
 		});
 
 		// eslint-disable-next-line
-	}
+	};
 
 	useEffect(() => {
 		const collectSetInterval = setInterval(() => {
@@ -90,9 +94,12 @@ export default function CollectEggs() {
 		};
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [nests.reduce((total, current) => {
-		return total + current.status;
-	}, 0), isCollect]);
+	}, [
+		nests.reduce((total, current) => {
+			return total + current.status;
+		}, 0),
+		isCollect,
+	]);
 
 	const showModal = () => {
 		setIsModalOpen(true);

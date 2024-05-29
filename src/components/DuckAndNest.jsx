@@ -1,4 +1,4 @@
-import { Col, message, Row, Table, Typography } from "antd";
+import { Col, message, Row, Table, Tag, Typography } from "antd";
 import React, { useContext, useEffect } from "react";
 import * as apiSerivce from "../api";
 import { QuackCtx } from "../context/QuackContext";
@@ -29,6 +29,17 @@ const nestColumns = [
 	},
 ];
 
+const metadataDesc = [{
+	title: "Common",
+	color: "blue"
+}, {
+	title: "Rare",
+	color: "purple"
+}, {
+	title: "Legendary",
+	color: "red"
+}]
+
 const duckColumns = [
 	{
 		title: "STT",
@@ -40,6 +51,32 @@ const duckColumns = [
 		title: "Id",
 		dataIndex: "id",
 		key: "id",
+	},
+	{
+		title: "Metadata",
+		children: [
+			{
+				title: "Head",
+				dataIndex: "metadata",
+				key: "metadata",
+				align: "center",
+				render: (text, record, index) =><Tag color={ metadataDesc[text.head_rare-1].color}>{ metadataDesc[text.head_rare-1].title}</Tag>
+			},
+			{
+				title: "Body",
+				dataIndex: "metadata",
+				key: "metadata",
+				align: "center",
+				render: (text, record, index) => <Tag color={ metadataDesc[text.body_rare-1].color}>{ metadataDesc[text.body_rare-1].title}</Tag>
+			},
+			{
+				title: "Arm",
+				dataIndex: "metadata",
+				key: "metadata",
+				align: "center",
+				render: (text, record, index) => <Tag color={ metadataDesc[text.arm_rare-1].color}>{ metadataDesc[text.arm_rare-1].title}</Tag>
+			},
+		],
 	},
 	{
 		title: "Created At",
@@ -62,27 +99,20 @@ export default function DuckAndNest() {
 		if (response.status === 200) {
 			const duckList = response.data.duck ?? [];
 			const nestList = response.data.nest ?? [];
+
 			localStorage.setItem("nests", JSON.stringify(nestList));
 			localStorage.setItem("ducks", JSON.stringify(duckList));
-            updateContext({
-                ducks: response.data.duck?? [],
-                nests: response.data.nest?? []
-            });
+			updateContext({
+				ducks: response.data.duck ?? [],
+				nests: response.data.nest ?? [],
+			});
 		} else message.error("Get Balance Failed");
 	}
 
 	useEffect(() => {
-		let getListReloadInterval = null;
-		if (uid) {
-			getListReload();
-			getListReloadInterval = setInterval(() => getListReload(), 3e3);
-		}
+		if (uid) getListReload();
 
-		return () => {
-			getListReloadInterval && clearInterval(getListReloadInterval);
-		};
-
-        // eslint-disable-next-line
+		// eslint-disable-next-line
 	}, [uid]);
 
 	return (
