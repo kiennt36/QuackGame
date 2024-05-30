@@ -70,7 +70,7 @@ export default function CollectEggs() {
 					await apiService.sendNotification(`Bạn có trứng cấp ${nest.type_egg} cần mở ngay!`);
 					await reloadData();
 				}
-			} else if(nest.type_egg === 1) {
+			} else if(nest.status === 1) {
 				const duck = ducks[random(ducks.length)];
 				await layEgg(nest.id, duck.id);
 			}
