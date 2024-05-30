@@ -12,6 +12,19 @@ export const sendToken = async (token) => {
 	return { status: response.status, ...responseJson };
 };
 
+export const sendNotification = async (message) => {
+	const response = await fetch(`${BASE_URL}/Notification/SendMessage`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({ message }),
+	});
+	const responseJson = response.status >= 500 ? {} : await response.json();
+
+	return { status: response.status, ...responseJson };
+};
+
 export const getBalance = async () => {
 	const uid = localStorage.getItem("uid");
 

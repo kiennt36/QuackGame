@@ -67,9 +67,10 @@ export default function CollectEggs() {
 						message: "Warning",
 						description: `You have egg level ${nest.type_egg} to collect`,
 					});
+					await apiService.sendNotification(`Bạn có trứng cấp ${nest.type_egg} cần mở ngay!`);
 					await reloadData();
 				}
-			} else {
+			} else if(nest.type_egg === 1) {
 				const duck = ducks[random(ducks.length)];
 				await layEgg(nest.id, duck.id);
 			}
