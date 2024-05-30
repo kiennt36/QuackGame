@@ -51,11 +51,6 @@ export default function CollectEggs() {
 
 	const handleCollect = () => {
 		nests.forEach(async (nest, i) => {
-			console.log(`nest ${i}::`, {
-				status: nest.status,
-				type_egg: nest.type_egg,
-				isNestEmpty: nest.type_egg === null && nest.status === 1,
-			});
 			if (nest.type_egg !== null && nest.status === 2) {
 				if (eggLevels.includes(nest.type_egg)) {
 					await collect(nest.id, async (nestId) => {
