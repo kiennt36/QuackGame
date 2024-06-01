@@ -49,7 +49,7 @@ export default function CollectEggs() {
 		});
 	};
 
-	const handleCollect = () => {
+	const handleCollect = async () => {
 		nests.forEach(async (nest, i) => {
 			if (nest.type_egg !== null && nest.status === 2) {
 				if (eggLevels.includes(nest.type_egg)) {
@@ -75,9 +75,9 @@ export default function CollectEggs() {
 	};
 
 	useEffect(() => {
-		const collectSetInterval = setInterval(() => {
-			handleCollect();
-		}, 6e3);
+		const collectSetInterval = setInterval(async () => {
+			await handleCollect();
+		}, 3e3);
 
 		if (isCollect) {
 			handleCollect();

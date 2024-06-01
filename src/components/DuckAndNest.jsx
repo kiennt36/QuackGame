@@ -112,6 +112,12 @@ export default function DuckAndNest() {
 	useEffect(() => {
 		if (uid) getListReload();
 
+		const getListReloadInterval = setInterval(() => getListReload(), 3e3);
+
+		return () => {
+            getListReloadInterval && clearInterval(getListReloadInterval);
+        };
+
 		// eslint-disable-next-line
 	}, [uid]);
 
