@@ -1,13 +1,9 @@
-import QuackContext from "./context/QuackContext";
-import DashboardPage from "./pages/DashboardPage";
+import { RouterProvider } from "react-router-dom";
 import "antd/dist/reset.css";
+import router from "./router";
 
 function App() {
-	return (
-		<QuackContext>
-			<DashboardPage />;
-		</QuackContext>
-	);
+	return <RouterProvider router={router} />;
 }
 
 export default App;

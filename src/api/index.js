@@ -116,3 +116,13 @@ export const layEgg = async (nestId, duckId) => {
 		};
 	}
 };
+
+// Users
+export const getUserList = async () => {
+	const response = await fetch(`${BASE_URL}/User/GetAll`, {
+		method: "GET",
+	});
+	const responseJson = response.status >= 500 ? {} : await response.json();
+
+	return { status: response.status, data: responseJson };
+};

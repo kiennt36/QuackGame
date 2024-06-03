@@ -1,69 +1,29 @@
 import {
 	MenuFoldOutlined,
 	MenuUnfoldOutlined,
-	UploadOutlined,
-	UserOutlined,
-	VideoCameraOutlined,
 } from "@ant-design/icons";
-import React, { useContext, useState } from "react";
-import { Button, Divider, Layout, Menu, theme } from "antd";
-
-import Balance from "../components/Balance";
-import { QuackCtx } from "../context/QuackContext";
-import DuckAndNest from "../components/DuckAndNest";
-import SendTokenModal from "../components/SendTokenModal";
-import CollectEggs from "../components/CollectEggs";
+import { useState } from "react";
+import { Outlet } from "react-router-dom";
+import { Button, Layout, theme } from "antd";
+import MenuSider from "../components/MenuSider";
+import Breadcrumb from "../components/Breadcrumb";
 
 const { Header, Sider, Content } = Layout;
 
 export default function DashboardPage() {
-	const { updateContext } = useContext(QuackCtx);
+	
 	const [collapsed, setCollapsed] = useState(false);
-	const [isModalOpen, setIsModalOpen] = useState(false);
+	
 
 	const {
 		token: { colorBgContainer, borderRadiusLG },
 	} = theme.useToken();
 
-	const showModal = () => {
-		setIsModalOpen(true);
-	};
-	const handleOk = () => {
-		updateContext({
-			isCollect: true,
-		});
-		setIsModalOpen(false);
-	};
-	const handleCancel = () => {
-		setIsModalOpen(false);
-	};
-
 	return (
-		<Layout>
+		<Layout style={{height: "100vh"}}>
 			<Sider trigger={null} collapsible collapsed={collapsed}>
 				<div className="demo-logo-vertical" />
-				<Menu
-					theme="dark"
-					mode="inline"
-					defaultSelectedKeys={["1"]}
-					items={[
-						{
-							key: "1",
-							icon: <UserOutlined />,
-							label: "nav 1",
-						},
-						{
-							key: "2",
-							icon: <VideoCameraOutlined />,
-							label: "nav 2",
-						},
-						{
-							key: "3",
-							icon: <UploadOutlined />,
-							label: "nav 3",
-						},
-					]}
-				/>
+				<MenuSider />
 			</Sider>
 			<Layout>
 				<Header
@@ -88,10 +48,9 @@ export default function DashboardPage() {
 							height: 64,
 						}}
 					/>
-					<Button type="primary" onClick={showModal}>
-						Send token
-					</Button>
+					
 				</Header>
+				<Breadcrumb />
 				<Content
 					style={{
 						margin: "24px 16px",
@@ -99,19 +58,12 @@ export default function DashboardPage() {
 						minHeight: 280,
 						background: colorBgContainer,
 						borderRadius: borderRadiusLG,
+						overflow: "hidden auto",
 					}}
 				>
-					<Balance />
-					<Divider />
-					<DuckAndNest />
+					<Outlet />
 				</Content>
 			</Layout>
-			<SendTokenModal
-				open={isModalOpen}
-				onOk={handleOk}
-				onCancel={handleCancel}
-			/>
-			<CollectEggs />
 		</Layout>
 	);
 }
